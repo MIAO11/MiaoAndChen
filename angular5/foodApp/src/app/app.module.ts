@@ -3,16 +3,33 @@ import { NgModule } from '@angular/core';
 
 
 import { AppComponent } from './app.component';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {SpinComponent} from './provider/spin/spin.component';
+import {SpinService} from './provider/spin/spin.service';
+import { LoginComponent } from './login/login.component';
+
+//modules
+import  { AppRoutingModule } from './app-routing.module';
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    SpinComponent,
+    LoginComponent,
   ],
   imports: [
-    BrowserModule
+    AppRoutingModule,
+    NgbModule.forRoot(),
+    BrowserModule,
+  
   ],
-  providers: [],
+  providers: [
+    SpinService,
+  ],
+  exports: [
+    SpinComponent,
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
