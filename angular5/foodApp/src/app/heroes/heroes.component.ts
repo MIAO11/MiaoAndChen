@@ -3,9 +3,10 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'app-heroes',
   templateUrl: './heroes.component.html',
-  styleUrls: ['./heroes.component.css']
+  styleUrls: ['./heroes.component.scss']
 })
 export class HeroesComponent implements OnInit {
+  selectedHero;
   heroes = [
     { id: 11, name: 'Mr. Nice' },
     { id: 12, name: 'Narco' },
@@ -24,6 +25,7 @@ export class HeroesComponent implements OnInit {
 
   }
   onSelect(hero): void {
+    this.selectedHero = hero;
     console.log(hero);
   }
 
