@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<div>这个是首页</div>
+{% for item in foods %}
+    <a href="{% url 'food:fooddetail' item.id %}">{{ item.name }}</a>
+    <br/>
+{% endfor %}
+</body>
+</html>
