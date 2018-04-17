@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+// import { Router } from '@angular/router';
 import { Validators, FormControl, FormGroup, FormBuilder } from '@angular/forms';
 
-// import { HttpService } from '../provider/http/http.service';
+import { HttpService } from '../provider/http/http.service';
 
 // import { Utils } from "../provider/util/utils";
 
@@ -17,7 +17,7 @@ export class LoginComponent implements OnInit {
   constructor(
     //private router: Router, 
     //private toastService: ToastService, 
-    //private httpService: HttpService,
+    private httpService: HttpService,
     //private userBusinessService:UserBusinessService,
     private formBuilder: FormBuilder) {
     let userNameFc = new FormControl('sysadmin', Validators.compose([Validators.required, Validators.minLength(6), Validators.maxLength(15)]));
@@ -41,6 +41,11 @@ export class LoginComponent implements OnInit {
    * 登录
    */
   login() {
+    this.httpService.get('',{},function(successful,data,res){
+      console.log(data);
+      console.log(successful);
+      console.log(res);
+    })
     //console.log(this.loginForm);
    /* if (this.loginForm.valid) {
       let that = this;

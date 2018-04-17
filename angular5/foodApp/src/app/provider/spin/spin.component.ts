@@ -1,4 +1,5 @@
-import { Component, Input, Output, OnChanges, SimpleChanges, EventEmitter } from '@angular/core';
+// import { Component, Input, Output, OnChanges, SimpleChanges, EventEmitter } from '@angular/core';
+import { Component} from '@angular/core';
 import { SpinService } from './spin.service';
 
 /**
@@ -11,7 +12,6 @@ import { SpinService } from './spin.service';
 })
 
 export class SpinComponent {
-
     // 标识
     showSpin: any = false;
 

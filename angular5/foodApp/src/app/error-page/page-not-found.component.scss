@@ -1,0 +1,22 @@
+@import '../../assets/scss/base/app-base.scss';
+
+.c-pnf-box{
+    padding-top: 13%;
+    .c-pnf-title{
+        width:440px;
+        margin-left:auto;
+        margin-right:auto;
+    }
+    .c-pnf-desc{
+        font-size: 16px;
+        color: $c-color-gray-light;
+        margin-left: auto;
+        margin-right: auto;
+        filter: alpha(opacity=8);
+        -moz-opacity: 0.8;
+        opacity: 0.8;
+        clear: both;
+        width:330px;
+        text-align: center;
+    }
+}

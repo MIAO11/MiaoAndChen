@@ -15,8 +15,10 @@ export class SpinService {
   getSpin(): Observable<boolean> {
     return this.spinSubject;
   }
+
   spin(showSpin: boolean) {
     this.spinSubject.next(showSpin);
   }
 
 }
+

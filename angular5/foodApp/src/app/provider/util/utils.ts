@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+// import { Injectable } from '@angular/core';
 
 /**
  * 工具
@@ -115,7 +115,7 @@ export class Utils {
             .replace(/m/g, String(time.Minute))
             .replace(/ss/ig, time.TSecond)
             .replace(/s/ig, String(time.Second))
-            .replace(/fff/ig, String(time.Millisecond))
+            .replace(/fff/ig, String(time.Millisecond));
     }
 
     /**
@@ -124,7 +124,7 @@ export class Utils {
      */
     static UUID(): string {
         return 'xxxxxxxx-xxxx-6xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,  (c) => {
-            let r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+            const r = Math.random() * 16 | 0, v = c === 'x' ? r : ( r & 0x3 | 0x8);
             return v.toString(16);
         });
     }
@@ -135,53 +135,51 @@ export class Utils {
      */
     static shortUUID(): string {
         return 'xx-6xy'.replace(/[xy]/g, (c) => {
-            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+            const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
             return v.toString(6);
         });
     }
 
     /**
      * 获得绝对位置
-     * @param element 
-     * @param target 
+     * @param element
+     * @param target
      */
     static absolutePosition(element: any, target: any): void {
-        let elementDimensions = element.offsetParent ? { width: element.offsetWidth, height: element.offsetHeight } : this.getHiddenElementDimensions(element);
-        let elementOuterHeight = elementDimensions.height;
-        let elementOuterWidth = elementDimensions.width;
-        let targetOuterHeight = target.offsetHeight;
-        let targetOuterWidth = target.offsetWidth;
-        let targetOffset = target.getBoundingClientRect();
-        let windowScrollTop = this.getWindowScrollTop();
-        let windowScrollLeft = this.getWindowScrollLeft();
-        let viewport = this.getViewport();
+      const elementDimensions = element.offsetParent ? {width: element.offsetWidth, height: element.offsetHeight } : this.getHiddenElementDimensions(element);
+      const elementOuterHeight = elementDimensions.height;
+      const elementOuterWidth = elementDimensions.width;
+      const targetOuterHeight = target.offsetHeight;
+      const targetOuterWidth = target.offsetWidth;
+      const targetOffset = target.getBoundingClientRect();
+      const windowScrollTop = this.getWindowScrollTop();
+      const windowScrollLeft = this.getWindowScrollLeft();
+      const viewport = this.getViewport();
         let top, left;
 
         if (targetOffset.top + targetOuterHeight + elementOuterHeight > viewport.height) {
             top = targetOffset.top + windowScrollTop - elementOuterHeight;
-            if(top < 0) {
+            if (top < 0) {
                 top = 0 + windowScrollTop;
             }
-        } 
-        else {
+        } else {
             top = targetOuterHeight + targetOffset.top + windowScrollTop;
         }
-
-        if (targetOffset.left + targetOuterWidth + elementOuterWidth > viewport.width)
-            left = targetOffset.left + windowScrollLeft + targetOuterWidth - elementOuterWidth;
-        else
-            left = targetOffset.left + windowScrollLeft;
-
+        if (targetOffset.left + targetOuterWidth + elementOuterWidth > viewport.width) {
+          left = targetOffset.left + windowScrollLeft + targetOuterWidth - elementOuterWidth;
+        } else {
+          left = targetOffset.left + windowScrollLeft;
+        }
         element.style.top = top + 'px';
         element.style.left = left + 'px';
     }
 
     /**
      * 获得尺寸
-     * @param element 
+     * @param element
      */
     static getHiddenElementDimensions(element: any): any {
-        let dimensions: any = {};
+      const dimensions: any = {};
         element.style.visibility = 'hidden';
         element.style.display = 'block';
         dimensions.width = element.offsetWidth;
@@ -196,7 +194,7 @@ export class Utils {
      * 获得视图大小
      */
     static getViewport(): any {
-        let win = window,
+      const win = window,
             d = document,
             e = d.documentElement,
             g = d.getElementsByTagName('body')[0],
@@ -210,7 +208,7 @@ export class Utils {
      * 获得窗口滚动高度
      */
     static getWindowScrollTop(): number {
-        let doc = document.documentElement;
+      const doc = document.documentElement;
         return (window.pageYOffset || doc.scrollTop) - (doc.clientTop || 0);
     }
 
@@ -218,7 +216,7 @@ export class Utils {
      * 获得窗口滚动宽度
      */
     static getWindowScrollLeft(): number {
-        let doc = document.documentElement;
+      const doc = document.documentElement;
         return (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0);
     }
 
@@ -228,29 +226,27 @@ export class Utils {
      * @param target
      */
     static relativePosition(element: any, target: any): void {
-        let elementDimensions = element.offsetParent ? { width: element.offsetWidth, height: element.offsetHeight } : this.getHiddenElementDimensions(element);
-        let targetHeight = target.offsetHeight;
-        let targetWidth = target.offsetWidth;
-        let targetOffset = target.getBoundingClientRect();
-        let windowScrollTop = this.getWindowScrollTop();
-        let viewport = this.getViewport();
+       const elementDimensions = element.offsetParent ? { width: element.offsetWidth, height: element.offsetHeight } : this.getHiddenElementDimensions(element);
+       const targetHeight = target.offsetHeight;
+       const targetWidth = target.offsetWidth;
+       const targetOffset = target.getBoundingClientRect();
+        // let windowScrollTop = this.getWindowScrollTop();
+       const viewport = this.getViewport();
         let top, left;
-        
+
         if ((targetOffset.top + targetHeight + elementDimensions.height) > viewport.height) {
             top = -1 * (elementDimensions.height);
-            if(targetOffset.top + top < 0) {
+            if (targetOffset.top + top < 0) {
                 top = 0;
             }
-        }
-        else {
+        } else {
             top = targetHeight;
         }
-
-        if ((targetOffset.left + elementDimensions.width) > viewport.width)
-            left = targetWidth - elementDimensions.width;
-        else
-            left = 0;
-
+        if ((targetOffset.left + elementDimensions.width) > viewport.width) {
+          left = targetWidth - elementDimensions.width;
+        } else {
+          left = 0;
+        }
         element.style.top = top + 'px';
         element.style.left = left + 'px';
     }
