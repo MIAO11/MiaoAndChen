@@ -1,0 +1,1 @@
+export const APP_SERVE_URL = 'http://app.u17.com/v3/appV3_3/android/phone/'; // API接口地址-测试外网

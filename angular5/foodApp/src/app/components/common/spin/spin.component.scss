@@ -1,6 +1,7 @@
-@import '../../../assets/scss/base/app-base.scss';
+@import '../../../../assets/scss/base/_app-base.scss';
 
-.c-spin-backdrop {
+app-spin{
+  .c-spin-backdrop {
     position: absolute;
     top: 0;
     right: 0;
@@ -60,3 +61,4 @@
     }
   }
   
+}

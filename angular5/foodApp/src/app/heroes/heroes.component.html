@@ -1,10 +1,10 @@
 <div class="hero">
-<li *ngFor="let hero of heroes"
-  [class.selected]="hero === true"
-  (click)="onSelect(hero)">
-  <span class="badge">{{hero.id}}</span> {{hero.name}}
-</li>
+<div class="btn-group" role="group" aria-label="Basic example">
+  <button   (click)="onSelect(item)" type="button" class="btn btn-secondary" *ngFor="let item of items">  {{item.weekDay}}</button>
 </div>
-<app-test [hero]="selectedHero" ></app-test>
+</div>
+<app-test  [dayItemDataList]="dayItemDataList" ></app-test>
+
+<router-outlet></router-outlet>
 <!-- Nav tabs -->
 

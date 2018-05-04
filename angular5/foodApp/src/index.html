@@ -3,13 +3,106 @@
 
 <head>
   <meta charset="utf-8">
-  <title>FoodApp</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>漫画网</title>
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
-
+  <style>
+    @-webkit-keyframes spin {
+        0% {
+            transform: rotate(0deg)
+        }
+        to {
+            transform: rotate(1turn)
+        }
+    }
+    @-moz-keyframes spin {
+        0% {
+            -moz-transform: rotate(0deg)
+        }
+        to {
+            -moz-transform: rotate(1turn)
+        }
+    }
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg)
+        }
+        to {
+            transform: rotate(1turn)
+        }
+    }
+    .spin-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1003;
+        display: none;
+    }
+    .spin-container .spin1 {
+        display: block;
+        position: relative;
+        left: calc(50% + 15px);
+        top: calc(50% - 50px);
+        width: 100px;
+        height: 100px;
+        margin: -75px 0 0 -75px;
+        border-radius: 50%;
+        border: 6px solid transparent;
+        border-top-color: #f95372;
+        transform: translateZ(0);
+        animation: spin 2s linear infinite
+    }
+    .spin-container .spin2 {
+        content: "";
+        position: absolute;
+        top: 5px;
+        left: 5px;
+        right: 5px;
+        bottom: 5px;
+        border-radius: 50%;
+        border: 6px solid transparent;
+        border-top-color: #00abff;
+        -webkit-animation: spin 3s linear infinite;
+        animation: spin 3s linear infinite
+    }
+    .spin-container .spin3 {
+        content: "";
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        right: 15px;
+        bottom: 15px;
+        border-radius: 50%;
+        border: 6px solid transparent;
+        border-top-color: #e7ba08;
+        animation: spin 1.5s linear infinite
+    }
+</style>
+<link rel="stylesheet" type="text/css" href="./assets/scss/theme/_default.css" />
 </head>
 <body>
+    <div class="spin-container" id="pageSpin">
+        <div class="spin1">
+            <div class="spin2"></div>
+            <div class="spin3"></div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        const initialize = function () {
+            let pageSpin = document.getElementById("pageSpin");
+            pageSpin.style.display = 'block';
+            document.onreadystatechange = function () {
+                if (document.readyState == "complete") {
+                    pageSpin.style.display = 'none';
+                }
+            }
+        }
+        initialize();
+    </script>
   <app-root></app-root>
 </body>
 </html>

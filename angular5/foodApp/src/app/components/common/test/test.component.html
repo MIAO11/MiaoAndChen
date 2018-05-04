@@ -1,7 +1,16 @@
-<div class="test">
-<div class="alert alert-primary" role="alert">
-  This is a primary alert—check it out!
-</div>
-<button type="button" class="btn btn-success">Success</button>
-<p>{{hero.name}}</p>
+<div class="container">
+  <div class="row">
+    <div  *ngFor="let item of dayItemDataList" >
+      <div *ngIf="item.dataType==1" class="cartoon">
+        <img (click)="goDetail(item)"  src="{{item.cover}}" class="img-fluid" alt="Responsive image">
+        <br>
+        <button type="button" class="btn btn-success mt-1" >开始阅读</button>
+        <!-- <p>{{item.comicName}}</p> -->
+      </div>
+      <div *ngIf="item.dataType==3">
+
+      </div>  
+    
+    </div>
+  </div>
 </div>
