@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { homeService } from '../provider/biz/homeService';
-import { SpinService } from '../components/common/spin/spin.service';
-
 
 @Component({
   selector: 'app-heroes',
@@ -13,7 +11,7 @@ export class HeroesComponent implements OnInit {
   items = [];
   constructor(
     private homeservice: homeService,
-    private spinService: SpinService,
+
   ) { }
 
   ngOnInit() {

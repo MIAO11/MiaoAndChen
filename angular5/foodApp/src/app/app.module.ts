@@ -26,6 +26,9 @@ import { ToastComponent } from './components/common/toast/toast.component';
 import { ToastService } from './components/common/toast/toast.service';
 import { SpinComponent } from './components/common/spin/spin.component';
 import { SpinService } from './components/common/spin/spin.service';
+import { RecommendIndexComponent } from './recommend-index/recommend-index.component';
+import { CartoonDetailComponent } from './cartoon-detail/cartoon-detail.component';
+import { ReadCartoonComponent } from './read-cartoon/read-cartoon.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +42,9 @@ import { SpinService } from './components/common/spin/spin.service';
     TodayDetailComponent,
     ToastBoxComponent,
     ToastComponent,
+    RecommendIndexComponent,
+    CartoonDetailComponent,
+    ReadCartoonComponent,
   ],
   imports: [
     AppRoutingModule,
