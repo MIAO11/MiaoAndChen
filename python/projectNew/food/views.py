@@ -44,6 +44,20 @@ class FoodCategoryViewSet(viewsets.ModelViewSet):
     queryset = foodcategory.objects.all()
     serializer_class = FoodCategorySerializer
 
+	name = models.CharField(max_length=100, verbose_name="商品名")
+    rating = models.IntegerField(default=0, verbose_name="排行")
+    sellCount = models.IntegerField(default=0, verbose_name="商品销售量")
+    fav_num = models.IntegerField(default=0, verbose_name="收藏数")
+    goods_num = models.IntegerField(default=0, verbose_name="库存数")
+    oldPrice = models.FloatField(default=0, verbose_name="市场价格")
+    price = models.FloatField(default=0, verbose_name="本店价格")
+    info = models.TextField(max_length=500, verbose_name="商品简短描述")
+    description = models.TextField(max_length=5000, verbose_name="商品描述")
+
+	
+
+
+
 
 # def seller(resquest):
 #     """
