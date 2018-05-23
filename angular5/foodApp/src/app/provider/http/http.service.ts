@@ -1,9 +1,19 @@
 import { Injectable } from '@angular/core';
 import {
-    Http, Headers, RequestOptions, URLSearchParams, RequestOptionsArgs, RequestMethod
-} from '@angular/http';
+    Http,
+    Response,
+    Headers,
+    RequestOptions,
+    URLSearchParams,
+    RequestOptionsArgs,
+    RequestMethod
+  } from '@angular/http';
 import {Utils} from '../util/utils';
-import { SpinService } from '../spin/spin.service';
+import { APP_SERVE_URL } from '../Constants';
+// tslint:disable-next-line:import-blacklist
+import {Observable} from 'rxjs';
+import { SpinService } from '../../components/common/spin/spin.service';
+
 
 
 /**
@@ -11,100 +21,165 @@ import { SpinService } from '../spin/spin.service';
  */
 @Injectable()
 export class HttpService {
-
+    REQUEST_TIMEOUT = 10000;
     constructor(
       private http: Http,
       private spinService: SpinService,
     ) {}
 
-    public request(url: string, options: RequestOptionsArgs, success: Function, error: Function): any {
-        this.spinService.spin(true);
-        this.http.request(url, options).subscribe(res => {
-            this.spinService.spin(false);
-            success(res.ok, res.json(), res);
-        }, err => {
-            this.spinService.spin(false);
-            // 处理请求失败
-            const msg = this.requestFailed(url, options, err);
-            error(err.ok, msg, err);
+      /**
+   * 请求远程数据
+   * @param url 请求地址
+   * @param options 请求配置
+   */
+  public request(url: string, options: RequestOptionsArgs): Observable<Response> {
+    // 转换url地址，若为绝对路径，则不变，若为相对路径，则补充接口前缀地址
+    url = url.startsWith('http') ? url : APP_SERVE_URL + url;
+
+    // 增加token
+    //options = this.optionsAddToken(options);
+
+    // 创建请求
+    return Observable.create(observer => {
+      // 显示加载状态
+      this.spinService.spin(true);
+      // 请求
+      this.http.request(url, options)
+        //.timeout(this.REQUEST_TIMEOUT)// 设置超时时间
+        //.map(res => res.json())// 转换为json对象
+        .subscribe((res: any) => {// 订阅请求返回结果
+          res = res.json();
+          // 隐藏加载状态
+          this.spinService.spin(false);
+          if (res.code == 1) {
+            observer.next(res.data.returnData);
+          } else {
+            alert(res.msg);
+          }
+        }, err => {// 请求失败
+          this.requestFailed(url, options, err); //处理请求失败
+          observer.error(err);
         });
+    });
+  }
 
-    }
-    // success:
-    // Function = function(){successful, data, res}
-    public get(url: string, paramMap: any = null, success: Function= function(){}, error: Function= function( ){}): any {
-        return this.request(url, new RequestOptions({
-            method: RequestMethod.Get,
-            search: HttpService.buildURLSearchParams(paramMap)
-        }), success, error);
-    }
+      /**
+   * get请求
+   * @param url 请求地址
+   * @param param 请求参数
+   */
+  public get(url: string, param: any = null): Observable<Response> {
+    return this.request(url, {
+      method: RequestMethod.Get,
+      search: this.buildURLSearchParams(param)
+    });
+  }
+/**
+   * post请求【json格式参数】
+   * @param url 请求地址
+   * @param param 请求参数
+   */
+  public post(url: string, param: any = {}): Observable<Response> {
+    return this.request(url, new RequestOptions({
+      method: RequestMethod.Post,
+      body: param,
+      headers: new Headers({
+        'Content-Type': 'application/json; charset=utf-8'
+      })
+    }));
+  }
 
-    public post(url: string, body: any = null, success: Function= function(){}, error: Function= function( ){}): any {
+  /**
+   * post请求【form格式参数】
+   * @param url 请求地址
+   * @param param 请求参数
+   */
+  public postForm(url: string, param: any = null): Observable<Response> {
 
-        return this.request(url, new RequestOptions({
-            method: RequestMethod.Post,
-            body: body,
-            headers: new Headers({
-                'Content-Type': 'application/json; charset=UTF-8'
-            })
-        }), success, error);
-    }
-    public postFormData(url: string, paramMap: any = null, success: Function= function() {}, error: Function=function( ){}): any {
-        return this.request(url, new RequestOptions({
-            method: RequestMethod.Post,
-            search: HttpService.buildURLSearchParams(paramMap).toString(),
-            headers: new Headers({
-                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-            })
-        }), success, error);
-    }
+    return this.request(url, new RequestOptions({
+      method: RequestMethod.Post,
+      body: this.buildURLSearchParams(param),
+      headers: new Headers({
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+      })
+    }));
 
-    public put(url: string, body: any = null, success: Function= function() {}, error: Function= function(){}): any {
-        return this.request(url, new RequestOptions({
-            method: RequestMethod.Put,
-            body: body
-        }), success, error);
-    }
+  }
 
-    public delete(url: string, paramMap: any = null, success: Function= function() {}, error: Function=function(){}): any {
-        return this.request(url, new RequestOptions({
-            method: RequestMethod.Delete,
-            search: HttpService.buildURLSearchParams(paramMap).toString()
-        }), success, error);
-    }
+  /**
+   * put请求
+   * @param url 请求地址
+   * @param param 请求参数
+   */
+  public put(url: string, param: any = {}): Observable<Response> {
+    return this.request(url, new RequestOptions({
+      method: RequestMethod.Put,
+      body: param
+    }));
+  }
 
-    public patch(url: string, body: any = null, success: Function= function() {}, error: Function= function() {}): any {
-        return this.request(url, new RequestOptions({
-            method: RequestMethod.Patch,
-            body: body
-        }), success, error);
-    }
+  /**
+   * delete请求
+   * @param url 请求地址
+   * @param param 请求参数
+   */
+  public delete(url: string, param: any = null): Observable<Response> {
+    return this.request(url, new RequestOptions({
+      method: RequestMethod.Delete,
+      body: param
+    }));
+  }
 
-    public head(url: string, paramMap: any = null, success: Function= function() {}, error: Function= function() {}): any {
-        return this.request(url, new RequestOptions({
-            method: RequestMethod.Head,
-            search: HttpService.buildURLSearchParams(paramMap).toString()
-        }), success, error);
-    }
+  /**
+   * patch请求
+   * @param url 请求地址
+   * @param param 请求参数
+   */
+  public patch(url: string, param: any = {}): Observable<Response> {
+    return this.request(url, new RequestOptions({
+      method: RequestMethod.Patch,
+      body: param
+    }));
+  }
 
-    public options(url: string, paramMap: any = null, success: Function= function() {}, error: Function= function() {}): any {
-        return this.request(url, new RequestOptions({
-            method: RequestMethod.Options,
-            search: HttpService.buildURLSearchParams(paramMap).toString()
-        }), success, error);
-    }
+  /**
+   * head请求
+   * @param url 请求地址
+   * @param param 请求参数
+   */
+  public head(url: string, param: any = null): Observable<Response> {
+    return this.request(url, new RequestOptions({
+      method: RequestMethod.Head,
+      search: param
+    }));
+  }
+
+  /**
+   * options请求
+   * @param url 请求地址
+   * @param param 请求参数
+   */
+  public options(url: string, param: any = null): Observable<Response> {
+    return this.request(url, new RequestOptions({
+      method: RequestMethod.Options,
+      search: param
+    }));
+  }
+
+
+    
 
     /**
      * 将对象转为查询参数
      * @param paramMap
      * @returns {URLSearchParams}
      */
-    private static buildURLSearchParams(paramMap): URLSearchParams {
-        let params = new URLSearchParams();
+    private  buildURLSearchParams(paramMap): URLSearchParams {
+        const params = new URLSearchParams();
         if (!paramMap) {
             return params;
         }
-        for (let key in paramMap) {
+        for (const key in paramMap) {
             let val = paramMap[key];
             if (val instanceof Date) {
                 val = Utils.dateFormat(val, 'yyyy-MM-dd hh:mm:ss');
@@ -113,6 +188,9 @@ export class HttpService {
         }
         return params;
     }
+
+
+
 
     /**
      * 处理请求失败事件
@@ -134,8 +212,6 @@ export class HttpService {
         } else {
             msg = '未知错误，请检查网络';
         }
-
         return msg;
-
     }
 }

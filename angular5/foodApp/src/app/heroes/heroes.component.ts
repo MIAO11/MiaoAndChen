@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { homeService } from '../provider/biz/homeService';
 
 @Component({
   selector: 'app-heroes',
@@ -6,27 +7,23 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./heroes.component.scss']
 })
 export class HeroesComponent implements OnInit {
-  selectedHero;
-  heroes = [
-    { id: 11, name: 'Mr. Nice' },
-    { id: 12, name: 'Narco' },
-    { id: 13, name: 'Bombasto' },
-    { id: 14, name: 'Celeritas' },
-    { id: 15, name: 'Magneta' },
-    { id: 16, name: 'RubberMan' },
-    { id: 17, name: 'Dynama' },
-    { id: 18, name: 'Dr IQ' },
-    { id: 19, name: 'Magma' },
-    { id: 20, name: 'Tornado' }
-  ];
-  constructor() { }
+  dayItemDataList;
+  items = [];
+  constructor(
+    private homeservice: homeService,
+
+  ) { }
 
   ngOnInit() {
-
+    this.homeservice.patientIndexInfo({}).subscribe((data: any) => {
+      this.items = data.dayDataList;
+      console.log(data);
+   });
   }
-  onSelect(hero): void {
-    this.selectedHero = hero;
-    console.log(hero);
+  onSelect(item): void {
+    this.dayItemDataList = item.dayItemDataList;
+    // this.spinService.spin(true);
+    // console.log(item);
   }
 
 }

@@ -4,6 +4,8 @@ import { RouterModule, Routes } from '@angular/router';
 import {HeroesComponent} from './heroes/heroes.component';
 import {NavComponent} from './components/common/nav/nav.component';
 import {TestComponent} from './components/common/test/test.component';
+import { TodayDetailComponent } from './today-detail/today-detail.component';
+import { RecommendIndexComponent } from './recommend-index/recommend-index.component';
 
 const routes: Routes = [
   {
@@ -13,6 +15,8 @@ const routes: Routes = [
   { path: 'heroes', component: HeroesComponent },
   { path: 'nav', component: NavComponent },
   { path: 'test', component: TestComponent },
+  { path: 'detail/:htmlId', component: TodayDetailComponent },
+  { path: 'recommend', component: RecommendIndexComponent },
   // { path: '**', component: PageNotFoundComponent},
 
 ];
