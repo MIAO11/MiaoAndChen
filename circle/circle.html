@@ -1,0 +1,113 @@
+<html>
+<head>
+<title>test</title>
+<!--本DEMO参考http://www.cnblogs.com/jr1993/p/4677921.html设计，实现传入百分比数值，通过JS计算按百分比显示圆环图形功能-->
+
+<style type="text/css">
+.circleProgress_wrapper{
+    width: 200px;
+    height: 200px;
+    margin: 50px auto;
+    position: relative;
+    border:1px solid #ddd;
+}
+.wrapper{
+    width: 100px;
+    height: 200px;
+    position: absolute;
+    top:0;
+    overflow: hidden;
+}
+.right{
+    right:0;
+}
+.left{
+    left:0;
+}
+.circleProgress{
+    width: 160px;
+    height: 160px;
+    border:20px solid transparent;
+    border-radius: 50%;
+    position: absolute;
+    top:0;
+    -webkit-transform: rotate(45deg);
+}
+.rightcircle{
+    border-top:20px solid #ccc;
+    border-right:20px solid #ccc;
+    border-left:20px solid #ccc;
+    border-bottom:20px solid #ccc;
+    right:0;
+}
+.leftcircle{
+    border-bottom:20px solid #ccc;
+    border-left:20px solid #ccc;
+    border-top:20px solid #ccc;
+    border-right:20px solid #ccc;
+    left:0;
+}
+.percent {
+    position: absolute;
+    top: 90;
+    left: 85;
+}
+</style>
+</head>
+<body>
+<div class="circleProgress_wrapper">
+        <div class="wrapper right">
+            <div class="circleProgress rightcircle"></div>
+        </div>
+        <div class="wrapper left">
+            <div class="circleProgress leftcircle"></div>
+        </div>
+        <span class="percent" int-percent='100'>50%</span>
+ </div>
+ </body>
+ </html>
+ <script type="text/javascript" src="jquery-1.8.0.min.js" ></script>
+ <script>
+ var deg = {percent:100,left:225,leftBC:"#ccc",right:225,rightBC:"#ccc"};
+ var pint;
+$(function(){
+    loadPercent($(".percent").attr("int-percent"));
+    pint = setInterval("refreshPercent()",100);
+ });
+ function refreshPercent() {
+    var percent = $(".percent").attr("int-percent");
+    if (percent>0) {
+        percent--;  
+    } else if (percent == 0){
+        percent = 100;
+    }
+    $(".percent").attr("int-percent",percent);
+    $(".percent").html(percent+"%");
+    if (percent==48) {
+        window.clearInterval(pint);
+    }
+    deg.percent=percent;    
+    loadPercent(percent);
+ }
+ function loadPercent(percent) {
+    var allDeg = countDegByPercent(percent);
+    if (allDeg>=180) {
+        var tmpDeg = allDeg - 180;
+        deg.left=45+tmpDeg;
+        deg.right=225
+        deg.leftBC="green";
+        deg.rightBC="green";
+    } else {
+        deg.right=45+allDeg;
+        deg.rightBC="green";
+        deg.leftBC="#ccc";
+    }
+    console.log(deg);
+    $(".circleProgress.rightcircle").css({"-webkit-transform":"rotate("+deg.right+"deg)","border-left":"20px solid "+deg.rightBC,"border-bottom":"20px solid "+deg.rightBC});
+    $(".circleProgress.leftcircle").css({"-webkit-transform":"rotate("+deg.left+"deg)","border-top":"20px solid "+deg.leftBC,"border-right":"20px solid "+deg.leftBC});
+ }
+ 
+ function countDegByPercent(percent) {
+    return percent*3.6;
+ }
+ </script>
