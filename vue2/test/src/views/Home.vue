@@ -1,6 +1,6 @@
 <template>
 <el-row>
-  <el-col :span="12" v-for="i in ListData"  :key="i">
+  <el-col class="mycol" :span="12" v-for="i in ListData"  :key="i">
     <el-card :body-style="{ padding: '0px' }">
       <img v-bind:src="i.商品主图"  class="image">
       <div style="padding: 14px;">
@@ -8,7 +8,7 @@
         <p class="myp">优惠券:{{i.优惠券面额}}</p>
         <div class="bottom clearfix">
           <!-- <time class="time">{{ currentDate }}</time> -->
-          <el-button type="text" class="button">一键复制优惠券淘口令</el-button>
+          <el-button type="text" class="button" v-on:click="copy(i.商品名称)">一键复制优惠券淘口令</el-button>
         </div>
       </div>
     </el-card>
@@ -18,6 +18,9 @@
 </template>
 
 <style>
+  .mycol{
+    height: 330px;
+  }
   .time {
     font-size: 13px;
     color: #999;
@@ -66,6 +69,7 @@ import { Component, Vue } from 'vue-property-decorator';
 import { DATA } from '../data';
 
 import HelloWorld from '@/components/HelloWorld.vue'; // @ is an alias to /src
+declare var Clipboard:any;
 
 @Component({
   components: {
@@ -81,8 +85,19 @@ export default class Home extends Vue {
   }
   created() {
     this.currentDate = new Date();
-    console.log(DATA);
+    console.log(Clipboard);
   } 
+
+  private copy(res:string){
+    console.log(res);
+    var clipboard = new Clipboard("#id_copy");
+        clipboard.on("success",function () {//复制成功的回调
+            
+        });
+        clipboard.on("error",function () {//复制失败的回调
+            
+        });
+  }
 
   
 }
