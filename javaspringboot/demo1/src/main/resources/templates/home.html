@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+    <meta charset="UTF-8" />
+    <title></title>
+</head>
+<body>
+<h1>Hello World</h1>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>姓名</th>
+        <th>email</th>
+    </tr>
+    <tr th:each="user : ${userList}">
+        <td th:text="${user.id}">zhansan</td>
+        <td th:text="${user.name}">zhansan</td>
+        <td th:text="${user.email}">1988-06-01</td>
+    </tr>
+</table>
+
+<select>
+    <option th:each="user:${userList}" th:value="${user.name}" th:text="${user.email}">我是默认值</option>
+</select>
+
+</body>
+</html>
