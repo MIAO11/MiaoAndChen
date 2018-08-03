@@ -2,17 +2,21 @@ package com.example.demo1.controller;
 
 import com.example.demo1.domain.User;
 import com.example.demo1.repostitory.UserDao;
+import com.example.demo1.util.ExcelTool;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiImplicitParams;
 
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -111,5 +115,23 @@ public class HelloController {
         Example<User> example = Example.of(user);
         return userDao.findOne(example);
     }
+
+    @ApiOperation(value = "获取商品列表", notes = "获取商品列表")
+    @ApiImplicitParam()
+    @GetMapping(value = "/api/v1/test/getSpList")
+    public List getSpList() {
+        List list=new ArrayList();
+        File f1 = new File("20180803.xls");
+        try {
+            list= ExcelTool.readExcel(f1);
+            System.out.println(ExcelTool.readExcel(f1));
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InvalidFormatException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
 
 }
