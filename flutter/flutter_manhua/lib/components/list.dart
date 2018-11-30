@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import '../http/Constants.dart';
 import 'package:http/http.dart' as http;
+import 'package:fluttertoast/fluttertoast.dart';
 
 class List extends StatefulWidget {
   @override
@@ -11,12 +12,20 @@ class List extends StatefulWidget {
 class ListState extends State<List> {
   var dayDataList = [];
   var _isFavorited = true;
+
   void initState() {
     http.read(Constants.HomeUrl).then((res) {
-      Map data = JSON.decode(res)['data'];
+      Map data = jsonDecode(res)['data'];
       Map returnData = data['returnData'];
-      dayDataList = returnData['dayDataList'];
-      print(dayDataList);
+      dayDataList = returnData['newVipList'];
+      //print(dayDataList);
+      Fluttertoast.showToast(
+        msg: "网络请求成功",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIos: 1,
+        bgcolor: "#000000",
+        textcolor: '#ffffff');
       setState(() {
         dayDataList = dayDataList;
       });
@@ -40,42 +49,63 @@ class ListState extends State<List> {
   Widget build(BuildContext context) {
     final _biggerFont = const TextStyle(fontSize: 18.0);
     return new ListView.builder(
+ 
       itemCount: dayDataList == null ? 0 : dayDataList.length,
       itemBuilder: (BuildContext context, int index) {
         return new Card(
-
-            //  onPressed: onPressed(dayDataList[index]["dayItemDataList"][0]['htmlId']),
-            child: new Container(
+          child: new Container(
           padding: new EdgeInsets.all(10.0),
           child: new Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               new Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   new Center(
                     child: new Text(
-                      dayDataList[index]["weekDay"],
+                      dayDataList[index]["itemTitle"],
                       style: _biggerFont,
                     ),
                   ),
+                  new Center(
+                    child: new Image.network(
+                      dayDataList[index]["newTitleIconUrl"],
+                      width: 20.0,
+                      height: 20.0,
+                      fit: BoxFit.cover,
+                    ),
+                  )
                 ],
               ),
               new Row(
-                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[                
-                  new Card(
-                    child: new Image.network(
-                        dayDataList[index]["dayItemDataList"][0]['comicCover'],
-                       // width: 140.0,
-                        height: 460.0,
-                        fit: BoxFit.cover,                
+                children: [
+                  new Expanded(
+                    child: new Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        new Container(
+                          padding: const EdgeInsets.only(bottom: 8.0),
+                          child: new Text(
+                            '测试',
+                            style: new TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
+                        new Text(
+                          'Kandersteg, Switzerland',
+                          style: new TextStyle(
+                            color: Colors.grey[500],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  // new Container(
-                  //   child: new Text('data'),
-                  // ),
+                  new Icon(
+                    Icons.star,
+                    color: Colors.red[500],
+                  ),
+                  new Text('41'),
                 ],
               ),
             ],

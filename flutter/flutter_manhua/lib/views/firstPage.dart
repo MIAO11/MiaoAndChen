@@ -13,7 +13,11 @@ class FirstPageState extends State<FirstPage> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return new Scaffold(
-  
+       appBar: new AppBar(
+        title:new Center(
+          child: new Text('今日'),         
+        )
+      ),
       body: new Container(
         child: new List(),
       )
