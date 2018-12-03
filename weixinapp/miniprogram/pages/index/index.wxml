@@ -1,0 +1,27 @@
+<!--index.wxml-->
+<view class="container">
+
+  <view class='warp' hidden='{{eye}}'>
+    <button open-type="getUserInfo" hover-class='none' bindgetuserinfo="getUserInfoFun">.</button>
+  </view>
+<swiper indicator-dots="{{indicatorDots}}" autoplay="{{autoplay}}" interval="{{interval}}" class="banner" duration="{{duration}}" circular="{{duration}}">
+  <block wx:for="{{goods_img}}" wx:key="goods_info">
+    <swiper-item>
+      <image src="{{imghref}}{{item.img}}" class="slide-image" mode="aspectFill" data-src='{{imghref}}{{item.img}}' bindtap="previewImage"/>
+    </swiper-item>
+  </block>
+</swiper>
+  <!-- 用户 openid -->
+  <view class="userinfo">
+    <button open-type="getUserInfo" class="userinfo-avatar" style="background-image: url({{avatarUrl}})"></button>
+    <view>
+      <p>{{userInfo.nickName}}</p>
+    </view>
+    <view>
+      <p>还未参与</p>
+    </view>
+  </view>
+
+  <button class="open" hidden="{{open}}" open-type="openSetting" bindtap="openSetting"> 修改授权 </button>
+
+</view>
