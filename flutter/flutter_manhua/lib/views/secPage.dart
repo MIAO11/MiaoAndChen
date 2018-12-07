@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../components/HomeList.dart';
+import '../components/testList.dart';
 class SecPage extends StatefulWidget {
   @override
   createState() => new SecPageState();

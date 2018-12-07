@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../components/HomeList.dart';
+import '../components/testList.dart';
 
 class SwiperPage extends StatefulWidget {
   @override
