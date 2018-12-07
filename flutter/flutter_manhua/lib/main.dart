@@ -1,9 +1,9 @@
-// Step 7 (Final): Change the app's theme
 import 'package:flutter/material.dart';
 import './views/firstPage.dart';
 import './views/secPage.dart';
 import './views/thirdPage.dart';
 import './views/SwiperPage.dart';
+import './views/Detail.dart';
 
 void main() => runApp(
   MaterialApp(
@@ -17,6 +17,9 @@ void main() => runApp(
         display3: TextStyle(fontSize: 23.0, color: Colors.black)
       ),
     ),
+    routes: <String,WidgetBuilder>{
+      '/detail':(BuildContext context)=>new DetailPage("")
+    },
   )
 );
 

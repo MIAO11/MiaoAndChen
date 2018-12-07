@@ -48,7 +48,8 @@ class ListState extends State<BannerWidget> {
   }
   Widget _swiperBuilder(BuildContext context, int index) {
     return (Image.network(
-      galleryItems[index]['cover'],
+      // galleryItems[index]['cover'],
+      "https://photo.16pic.com/00/04/73/16pic_473516_b.jpg",
       fit: BoxFit.fill,
     ));
   }
