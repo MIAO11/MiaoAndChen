@@ -113,4 +113,6 @@ class ListState extends State<HomeList> {
   goDetail(int index) {
     print(galleryItems[index]);
   }
+
+  
 }
