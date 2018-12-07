@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
-import '../util/HttpUtil.dart';
 import '../http/HttpService.dart';
 import 'dart:convert';
 import '../http/Constants.dart';
 
 
-class homeList extends StatefulWidget {
+class HomeList extends StatefulWidget {
   @override
   createState() => new ListState();
 }
 
-class ListState extends State<homeList> {
+class ListState extends State<HomeList> {
   var comicLists = [];
+  
   void initState() {
     HttpService.get(Constants.HomeTjUrl, (res){
       Map data = jsonDecode(res)['data'];
       Map returnData = data['returnData'];
       comicLists=returnData['comicLists'];
+      print(comicLists.toString());
        setState(() {
         comicLists = comicLists;
       });

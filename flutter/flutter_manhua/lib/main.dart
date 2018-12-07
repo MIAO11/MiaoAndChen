@@ -3,61 +3,78 @@ import 'package:flutter/material.dart';
 import './views/firstPage.dart';
 import './views/secPage.dart';
 import './views/thirdPage.dart';
+import './views/SwiperPage.dart';
 
-void main() => runApp(new MyApp());
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return new MaterialApp(
-      title: 'Startup Name Generator',
-      theme: new ThemeData(
-        primaryColor: Colors.blueAccent,
+void main() => runApp(
+  MaterialApp(
+    home: MyApp(),
+    theme: ThemeData(
+      buttonColor: Colors.green,
+      backgroundColor: Colors.grey[200],
+      textTheme: TextTheme(
+        display1: TextStyle(fontSize: 17.0, color: Colors.black),
+        display2: TextStyle(fontSize: 13.0, color: Colors.grey),
+        display3: TextStyle(fontSize: 23.0, color: Colors.black)
       ),
-      home: new RandomWords(),
-    );
-  }
-}
+    ),
+  )
+);
 
-class RandomWords extends StatefulWidget {
+class MyApp extends StatefulWidget {
+  _MyAppState createState() => _MyAppState();
+}
+class _MyAppState extends State<MyApp> {
+  PageController pageController;
+  int currentIndex = 0;
+
   @override
-  createState() => new RandomWordsState();
-}
-
-class RandomWordsState extends State<RandomWords> with SingleTickerProviderStateMixin{
-  TabController tabController;
-
   void initState() {
-    tabController = new TabController(vsync: this, length: 3);
+    // TODO: implement initState
+    super.initState();
+    this.pageController = PageController(initialPage: this.currentIndex);
   }
+
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      body: 
-      new TabBarView(
-        controller: tabController,
-        children: <Widget>[new FirstPage(), new SecPage(), new ThirdPage()],
+    return Scaffold(
+      bottomNavigationBar: BottomNavigationBar(
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.calendar_today),
+            title: Text("今日"),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.search),
+            title: Text("发现"),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.collections),
+            title: Text("收藏"),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            title: Text("我的"),
+          ),
+        ],
+        fixedColor: Colors.green,
+        type: BottomNavigationBarType.fixed,
+        onTap: (page) {
+          pageController.jumpToPage(page);
+        },
+        currentIndex: this.currentIndex,
       ),
-      bottomNavigationBar: new Material(
-        color: Colors.blueAccent,
-        child: new TabBar(
-          controller: tabController,
-          tabs: <Tab>[
-            new Tab(
-              text: '今日',
-              icon: new Icon(Icons.home),
-            ),
-            new Tab(
-              text: '发现',
-              icon: new Icon(Icons.menu),
-            ),
-            new Tab(
-              text: '分类',
-              icon: new Icon(Icons.cloud_queue),
-            ),
-          ],
-        )
-      )
+      body: PageView(
+        children: <Widget>[
+         new FirstPage(), new SecPage(), new ThirdPage(),
+          new SwiperPage()
+        ],
+        controller: this.pageController,
+        onPageChanged: (index) {
+          setState((){
+            this.currentIndex = index;
+          });
+        },
+      ),
     );
   }
 }

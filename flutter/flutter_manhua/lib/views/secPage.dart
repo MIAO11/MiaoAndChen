@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../components/homelist.dart';
+import '../components/HomeList.dart';
 class SecPage extends StatefulWidget {
   @override
   createState() => new SecPageState();
@@ -13,11 +13,11 @@ class SecPageState extends State<SecPage> {
     return new Scaffold(
       appBar: new AppBar(
         title:new Center(
-          child: new Text('排行榜'),         
+          child: new Text('发现'),         
         )
       ),
       body: new Center(
-        child: new homeList(),
+        child: new HomeList(),
       ),
     );
   }
