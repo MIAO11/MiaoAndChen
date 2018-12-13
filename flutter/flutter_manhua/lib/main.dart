@@ -26,7 +26,7 @@ void main() => runApp(
 class MyApp extends StatefulWidget {
   _MyAppState createState() => _MyAppState();
 }
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<MyApp> with AutomaticKeepAliveClientMixin{
   PageController pageController;
   int currentIndex = 0;
 
@@ -80,4 +80,8 @@ class _MyAppState extends State<MyApp> {
       ),
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

@@ -13,8 +13,20 @@ class HomeList extends StatefulWidget {
 class ListState extends State<HomeList> {
   var comicLists = [];
   var galleryItems = [];
-
+  ScrollController _scrollController = ScrollController();
   void initState() {
+    super.initState();
+    getData();
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        print('滑动到了最底部');
+        _getMore();
+      }
+    });
+  }
+
+  Future getData() async {
     HttpService.get(Constants.HomeTjUrl, (res) {
       Map data = jsonDecode(res)['data'];
       Map returnData = data['returnData'];
@@ -33,6 +45,7 @@ class ListState extends State<HomeList> {
     // final _biggerFont = const TextStyle(fontSize: 18.0);
     return new ListView.builder(
       itemCount: comicLists == null ? 0 : comicLists.length,
+      controller: _scrollController,
       itemBuilder: (BuildContext context, int index) {
         if (index == 0) {
           return new Container(
@@ -51,7 +64,7 @@ class ListState extends State<HomeList> {
                 autoplay: true,
                 onTap: (index) => goDetail(index)),
           );
-        } else {
+        } else if(index<comicLists.length-1) {
           return new Card(
               child: new Container(
             padding: new EdgeInsets.all(10.0),
@@ -77,7 +90,7 @@ class ListState extends State<HomeList> {
                             ),
                           ),
                           new Text(
-                            '哈哈',
+                            index.toString(),
                             style: new TextStyle(
                               color: Colors.grey[500],
                             ),
@@ -95,6 +108,9 @@ class ListState extends State<HomeList> {
               ],
             ),
           ));
+        }else{
+          print('加载更多页面');
+          return _getMoreWidget();
         }
       },
     );
@@ -114,5 +130,60 @@ class ListState extends State<HomeList> {
     print(galleryItems[index]);
   }
 
-  
+  /*
+   * 下拉刷新方法,为list重新赋值
+   */
+  Future<Null> _getMore() async {
+    comicLists.add({});
+    comicLists.add({});
+    comicLists.add({});
+    comicLists.add({});
+    comicLists.add({});
+    comicLists.add({});
+    comicLists.add({});
+    comicLists.add({});
+    comicLists.add({});
+    comicLists.add({});
+    comicLists.add({});
+    comicLists.add({});
+    comicLists.add({});
+    comicLists.add({});
+    comicLists.add({});
+    comicLists.add({});
+
+    setState(() {
+      comicLists = comicLists;
+    });
+  }
+
+
+  /**
+   * 加载更多时显示的组件,给用户提示
+   */
+  Widget _getMoreWidget() {
+    return Center(
+      child: Padding(
+        padding: EdgeInsets.all(10.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              '加载中...',
+              style: TextStyle(fontSize: 16.0),
+            ),
+            CircularProgressIndicator(
+              strokeWidth: 1.0,
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _scrollController.dispose();
+  }
 }

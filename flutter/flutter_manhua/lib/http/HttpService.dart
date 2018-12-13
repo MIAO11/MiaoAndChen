@@ -1,6 +1,9 @@
 import 'dart:async';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class UserAgentClient extends http.BaseClient {
   final String userAgent;
@@ -12,8 +15,8 @@ class UserAgentClient extends http.BaseClient {
   }
 }
 
-class HttpService{
-static void get(String url, Function callback,
+class HttpService {
+  static void get(String url, Function callback,
       {Map<String, String> params, Function errorCallback}) async {
     if (params != null && params.isNotEmpty) {
       StringBuffer sb = new StringBuffer("?");
@@ -35,12 +38,12 @@ static void get(String url, Function callback,
       }
     }
   }
- 
+
   static void post(String url, Function callback,
       {Map<String, String> params, Function errorCallback}) async {
     try {
       http.Response res = await http.post(url, body: params);
- 
+
       if (callback != null) {
         callback(res.body);
       }
@@ -51,5 +54,3 @@ static void get(String url, Function callback,
     }
   }
 }
-
-
