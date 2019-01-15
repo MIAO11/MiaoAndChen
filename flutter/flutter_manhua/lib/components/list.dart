@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import '../http/Constants.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+// import 'package:fluttertoast/fluttertoast.dart';
 import '../views/Detail.dart';
 import '../http/HttpService.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class List extends StatefulWidget {
   @override
@@ -12,141 +11,164 @@ class List extends StatefulWidget {
 }
 
 class ListState extends State<List> {
-  var dayDataList=[];
-  var _isFavorited = true;
-  
+  var result = [];
+  var resultList;
+  var params = {'page': 1, 'count': 20};
+  ScrollController _scrollController = ScrollController();
+
   void initState() {
     super.initState();
-    getData();
-  }
-
-  Future getData() async {
-    HttpService.get(Constants.HomeUrl, (res) {
-      Map data = jsonDecode(res)['data'];
-      Map returnData = data['returnData'];
-      dayDataList = returnData['newVipList'];
-      setState(() {
-        dayDataList = dayDataList;
-      });
-    });
-  }
-
-  void onPressed(id) {
-    print(id);
-    setState(() {
-      // If the lake is currently favorited, unfavorite it.
-      if (_isFavorited) {
-        _isFavorited = false;
-        // Otherwise, favorite it.
-      } else {
-        _isFavorited = true;
+    getData(false);
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        print('滑动到了最底部');
+        _getMore();
       }
     });
   }
 
+  Future getData(isloadmore) async {
+    print('开始请求');
+    HttpService.get(Constants.ShiUrl, (res) {
+      resultList = jsonDecode(res)['result'];
+      if (isloadmore) {
+        print('加载更多');
+        result.addAll(resultList);
+      } else {
+        print('不是加载更多');
+        result = resultList;
+      }
+      print(result.length);
+      setState(() {
+        result = result;
+      });
+    }, params: params);
+  }
+
   Widget _renderRow(BuildContext context, int index) {
-    final _biggerFont = const TextStyle(fontSize: 18.0);
-    return new GestureDetector(
-      child: new Card(
-        child: new Container(
-          padding: new EdgeInsets.all(10.0),
-          child: new Column(
+    if (index < result.length - 1) {
+      return GestureDetector(        
+         child: new Card(
+        child:new Container(          
+          padding: EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
+          child: Column(            
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              new Row(
+              Row(               
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  new Center(
-                    child: new Text(
-                      dayDataList[index]["itemTitle"],
-                      style: _biggerFont,
+                  Container(
+                    child: Text(                     
+                      result[index]["title"],                    
+                      //overflow: TextOverflow.ellipsis,
+                      softWrap: false, //设置自动换行
+                      maxLines: 2,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 14.0),
                     ),
                   ),
-                  new Center(
-                    child: new Image.network(
-                      dayDataList[index]["newTitleIconUrl"],
-                      width: 20.0,
-                      height: 20.0,
-                      fit: BoxFit.cover,
-                    ),
-                  )
                 ],
               ),
-              new Row(
+              Row(
                 children: [
-                  new Expanded(
-                    child: new Column(
+                  Expanded(
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        new Container(
-                          padding: const EdgeInsets.only(bottom: 8.0),
-                          child: new Text(
-                            '测试',
-                            style: new TextStyle(
-                              fontWeight: FontWeight.bold,
+                        Container(
+                          padding: const EdgeInsets.only(top: 8.0,bottom: 8.0),
+                          child: Text(
+                            result[index]["authors"],
+                            style: TextStyle(
+                              color: Colors.grey[500],
                             ),
-                          ),
-                        ),
-                        new Text(
-                          'Kandersteg, Switzerland',
-                          style: new TextStyle(
-                            color: Colors.grey[500],
                           ),
                         ),
                       ],
                     ),
                   ),
-                  new Icon(
-                    Icons.star,
-                    color: Colors.red[500],
-                  ),
-                  new Text('41'),
                 ],
               ),
+              // Divider(),
             ],
           ),
-        ),
-      ),
-      onTap: () => _toDetail(dayDataList[index]["itemTitle"].toString()),
-    );
+        ),  
+        ),    
+        onTap: () => _toDetail(result[index]),         
+      );
+    }
+    if (index == result.length - 1) {
+      return _getMoreWidget();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    print(dayDataList);
     return new Scaffold(
       body: RefreshIndicator(
         onRefresh: _onRefresh,
         child: ListView.builder(
           itemBuilder: _renderRow,
-          itemCount: dayDataList == null ? 0 : dayDataList.length,
+          itemCount: result == null ? 0 : result.length,
+          controller: _scrollController,
         ),
       ),
     );
   }
 
-  void _toDetail(String id) {
-    Navigator.push(context,
-        new MaterialPageRoute(builder: (context) => new DetailPage(id)));
+  void _toDetail(var params) {
+    Navigator.push(
+        context,
+        new MaterialPageRoute(
+            builder: (context) => new DetailPage(params: params)));
   }
 
   /*
    * 下拉刷新方法,为list重新赋值
    */
   Future<Null> _onRefresh() async {
-    getData();
-    Fluttertoast.showToast(
-        msg: "下拉刷新成功",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIos: 1,
-        bgcolor: "#000000",
-        textcolor: '#ffffff');
-    // await Future.delayed(Duration(seconds: 3), () {
-    //   print('refresh');
-    //   setState(() {
-    //     dayDataList = [];
-    //   });
-    // }
+    params['page'] = 1;
+    getData(false);
+    // Fluttertoast.showToast(
+    //     msg: "下拉刷新成功",
+    //     toastLength: Toast.LENGTH_SHORT,
+    //     gravity: ToastGravity.BOTTOM,
+    //     timeInSecForIos: 1,
+    //     backgroundColor: Colors.black,
+    //     textColor: Colors.white);
+  }
+
+  /**
+   * 加载更多时显示的组件,给用户提示
+   */
+  Widget _getMoreWidget() {
+    return Center(
+      child: Padding(
+        padding: EdgeInsets.all(10.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              '加载中...',
+              style: TextStyle(fontSize: 16.0),
+            ),
+            CircularProgressIndicator(
+              strokeWidth: 1.0,
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  /*
+   * 上拉加载,为list重新赋值
+   */
+  Future<Null> _getMore() async {
+    params['page'] = params['page'] + 1;
+    await getData(true);
+    return;
   }
 }

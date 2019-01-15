@@ -15,7 +15,7 @@ class FirstPageState extends State<FirstPage> {
     return new Scaffold(
        appBar: new AppBar(
         title:new Center(
-          child: new Text('今日'),         
+          child: new Text('唐诗'),         
         )
       ),
       body: new Container(

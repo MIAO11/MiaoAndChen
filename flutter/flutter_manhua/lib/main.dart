@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:manhua/views/DtDetail.dart';
 import './views/firstPage.dart';
 import './views/secPage.dart';
 import './views/thirdPage.dart';
-import './views/SwiperPage.dart';
+import './views/MyPage.dart';
 import './views/Detail.dart';
+import 'package:flutter/rendering.dart';
 
-void main() => runApp(
-  MaterialApp(
+void main() {
+  //debugPaintSizeEnabled = true; 
+  runApp(new MaterialApp(
     home: MyApp(),
     theme: ThemeData(
       buttonColor: Colors.green,
@@ -18,10 +21,11 @@ void main() => runApp(
       ),
     ),
     routes: <String,WidgetBuilder>{
-      '/detail':(BuildContext context)=>new DetailPage("")
-    },
-  )
-);
+      '/detail':(BuildContext context)=>new DetailPage(params:{}),
+      '/dtdetail':(BuildContext context)=>new DtDetailPage(channelid:''),
+    },)
+  );
+}
 
 class MyApp extends StatefulWidget {
   _MyAppState createState() => _MyAppState();
@@ -39,12 +43,13 @@ class _MyAppState extends State<MyApp> with AutomaticKeepAliveClientMixin{
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.calendar_today),
-            title: Text("今日"),
+            title: Text("唐诗"),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.search),
@@ -52,7 +57,7 @@ class _MyAppState extends State<MyApp> with AutomaticKeepAliveClientMixin{
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.collections),
-            title: Text("收藏"),
+            title: Text("电台"),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
@@ -69,7 +74,7 @@ class _MyAppState extends State<MyApp> with AutomaticKeepAliveClientMixin{
       body: PageView(
         children: <Widget>[
          new FirstPage(), new SecPage(), new ThirdPage(),
-          new SwiperPage()
+          new ProfileWidget()
         ],
         controller: this.pageController,
         onPageChanged: (index) {
@@ -82,6 +87,5 @@ class _MyAppState extends State<MyApp> with AutomaticKeepAliveClientMixin{
   }
 
   @override
-  // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
 }
