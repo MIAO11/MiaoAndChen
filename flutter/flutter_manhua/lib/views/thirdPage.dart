@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:manhua/http/Constants.dart';
 import 'package:manhua/http/HttpService.dart';
 import 'package:manhua/views/DtDetail.dart';
-import 'package:manhua/util/Util.dart';
 
 class ThirdPage extends StatefulWidget {
   @override
@@ -36,7 +35,10 @@ class GridViewState extends State {
   var resultList = [];
   var channellist = [];
   var channel = [];
+
+  @override
   void initState() {
+    super.initState();
     getData();
   }
 
@@ -59,10 +61,6 @@ class GridViewState extends State {
     }
     return widgetList;
   }
-
-  String url =
-      "https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=495625508,"
-      "3408544765&fm=27&gp=0.jpg";
   Widget getItemWidget(channel) {
     //BoxFit 可设置展示图片时 的填充方式
     return GestureDetector(
@@ -80,14 +78,16 @@ class GridViewState extends State {
           ],
         ),
       ),
-      onTap: () => _toDetail(channel['channelid']),
+      onTap: () => _toDetail(channel['ch_name']),
     );
     //return new Image(image: new NetworkImage(url), fit: BoxFit.cover);
   }
 
-  getData() async {
+  getData(){
+    print('请求了');
     HttpService.get(Constants.DtUrl, (res) {
       resultList = jsonDecode(res)['result'];
+      print(resultList);
       if (resultList.length > 0) {
         setState(() {
           channellist = resultList;
@@ -97,11 +97,10 @@ class GridViewState extends State {
     }, params: null);
   }
 
-  void _toDetail(String channelid) {
-    Util.showToast('点击我了', context);
+  void _toDetail(String channelname) {
     Navigator.push(
         context,
         new MaterialPageRoute(
-            builder: (context) => new DtDetailPage(channelid: channelid)));
+            builder: (context) => new DtDetailPage(channelname: channelname)));
   }
 }

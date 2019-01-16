@@ -58,11 +58,11 @@ class ListState extends State<List> {
               Row(               
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  Container(
+                  Expanded(
                     child: Text(                     
                       result[index]["title"],                    
                       //overflow: TextOverflow.ellipsis,
-                      softWrap: false, //设置自动换行
+                      softWrap: true, //设置自动换行
                       maxLines: 2,
                       style: TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 14.0),

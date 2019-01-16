@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:manhua/views/DtDetail.dart';
+import 'package:manhua/views/LoginPage.dart';
+import 'package:manhua/views/TsPage.dart';
+import 'package:manhua/views/XsDetail.dart';
 import './views/firstPage.dart';
 import './views/secPage.dart';
 import './views/thirdPage.dart';
@@ -21,8 +24,11 @@ void main() {
       ),
     ),
     routes: <String,WidgetBuilder>{
+      '/loginpage':(BuildContext context)=>new LoginPage(),
       '/detail':(BuildContext context)=>new DetailPage(params:{}),
-      '/dtdetail':(BuildContext context)=>new DtDetailPage(channelid:''),
+      '/xsdetail':(BuildContext context)=>new XsDetailPage(),
+      '/dtdetail':(BuildContext context)=>new DtDetailPage(channelname:''),
+      '/tspage':(BuildContext context)=>new TsPage(),
     },)
   );
 }
@@ -49,7 +55,7 @@ class _MyAppState extends State<MyApp> with AutomaticKeepAliveClientMixin{
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.calendar_today),
-            title: Text("唐诗"),
+            title: Text("首页"),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.search),
@@ -64,7 +70,7 @@ class _MyAppState extends State<MyApp> with AutomaticKeepAliveClientMixin{
             title: Text("我的"),
           ),
         ],
-        fixedColor: Colors.green,
+        fixedColor: Colors.blue,
         type: BottomNavigationBarType.fixed,
         onTap: (page) {
           pageController.jumpToPage(page);

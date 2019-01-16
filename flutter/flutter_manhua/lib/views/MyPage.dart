@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
-abstract class ProfileModel{}
+import 'package:manhua/views/LoginPage.dart';
+
+abstract class ProfileModel {}
+
 class ProfileData extends ProfileModel {
   var assetName;
   var title;
-
   ProfileData({this.assetName, this.title});
 }
+
 class ProfileLine extends ProfileModel {}
 
 final datas = [
@@ -27,7 +30,6 @@ final datas = [
   ProfileData(assetName: "images/profile_rss.png", title: "设置"),
 ];
 
-
 class ProfileWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -35,12 +37,12 @@ class ProfileWidget extends StatelessWidget {
       primary: false,
       body: ListView.builder(
         padding: EdgeInsets.only(top: 0.0),
-        itemCount: datas.length+1,
+        itemCount: datas.length + 1,
         itemBuilder: (context, index) {
           if (index == 0) {
             return _generatorProfileHeaderWidget(context);
           } else {
-            final model = datas[index-1];
+            final model = datas[index - 1];
             if (model is ProfileData) {
               return ListTile(
                 leading: Container(
@@ -60,11 +62,10 @@ class ProfileWidget extends StatelessWidget {
       ),
     );
   }
-}
 
-Widget _generatorProfileHeaderWidget(BuildContext context) {
-  return Container(
-    child: Column(
+  Widget _generatorProfileHeaderWidget(BuildContext context) {
+    return Container(
+        child: Column(
       children: <Widget>[
         Stack(
           alignment: AlignmentDirectional.center,
@@ -73,16 +74,23 @@ Widget _generatorProfileHeaderWidget(BuildContext context) {
               color: Colors.green,
               height: 200.0,
             ),
-            Column(
-              children: <Widget>[
-                Container(
-                  width: 60.0,
-                  padding: EdgeInsets.only(bottom: 10.0),
-                  child: Image.asset("images/profile_header.png")
-                ),
-                Text('主人，戳我登录', style: TextStyle(color: Colors.white, fontSize: 15.0))
-              ],
-            )
+            GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      new MaterialPageRoute(
+                          builder: (context) => new LoginPage()));
+                },
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                        width: 60.0,
+                        padding: EdgeInsets.only(bottom: 10.0),
+                        child: Image.asset("images/profile_header.png")),
+                    Text('主人，戳我登录',
+                        style: TextStyle(color: Colors.white, fontSize: 15.0))
+                  ],
+                ))
           ],
         ),
         Container(
@@ -90,6 +98,6 @@ Widget _generatorProfileHeaderWidget(BuildContext context) {
           height: 10.0,
         )
       ],
-    )
-  );
+    ));
+  }
 }
