@@ -7,11 +7,34 @@ class LoginPage extends StatefulWidget {
   }
 }
 
-class LoginPageState extends State<LoginPage> {
+
+
+class LoginPageState extends State<LoginPage>with TickerProviderStateMixin {
   static const LOGO = "images/profile_header.png";
 
+  AnimationController controller_record;
+  final _commonTween = new Tween<double>(begin: 0.0, end: 1.0);
   var _userNameController = new TextEditingController();
   var _userPassController = new TextEditingController();
+  Animation<double> animation_record;
+  Animation<double> animation_needle;
+
+    @override
+  void initState() {
+    super.initState();
+    controller_record = new AnimationController(
+        duration: const Duration(milliseconds: 15000),vsync:this);
+    animation_record =
+        new CurvedAnimation(parent: controller_record, curve: Curves.linear);
+    animation_record.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        controller_record.repeat();
+      } else if (status == AnimationStatus.dismissed) {
+        controller_record.forward();
+      }
+    });
+    controller_record.forward();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,13 +47,31 @@ class LoginPageState extends State<LoginPage> {
         centerTitle: true,
         title: new Text('登录'),
       ),
-      body: Column(
+      body: Stack(
+      children: <Widget>[
+        Container(
+              decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('images/test.jpg'),
+                fit: BoxFit.cover,
+                colorFilter: ColorFilter.mode(Colors.black54, BlendMode.overlay)
+              )
+            ),
+            child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         mainAxisSize: MainAxisSize.max,
-        children: <Widget>[
+        children: <Widget>[  
           new Padding(
             padding: new EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 20.0),
-              child:  new Image.asset(LOGO),                    
+              child:  
+              Container(
+                // width: 120.0,
+                // height: 120.0,              
+                // child:  new Image.asset(LOGO),
+                child: new RotateRecord(
+                  animation: _commonTween.animate(controller_record),               
+                ),
+              )                              
           ),
           new Padding(
             padding: new EdgeInsets.fromLTRB(
@@ -72,9 +113,37 @@ class LoginPageState extends State<LoginPage> {
                     ),
                   )),
             ),
-          )
-        ],
+          ),
+        ],       
       ),
+      ),
+      ],     
+    )
     );
   }
 }
+class RotateRecord extends AnimatedWidget {
+  RotateRecord({Key key, Animation<double> animation})
+      : super(key: key, listenable: animation);
+
+  Widget build(BuildContext context) {
+    final Animation<double> animation = listenable;
+    return new Container(
+      margin: new EdgeInsets.symmetric(vertical: 10.0),
+      height: 250.0,
+      width: 250.0,
+      child: new RotationTransition(
+          turns: animation,
+          child: new Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              image: DecorationImage(
+                image: NetworkImage(
+                    "https://images-na.ssl-images-amazon.com/images/I/51inO4DBH0L._SS500.jpg"),
+              ),
+            ),
+          )),
+    );
+  }
+}
+

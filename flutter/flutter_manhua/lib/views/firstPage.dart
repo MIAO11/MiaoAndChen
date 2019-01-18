@@ -19,8 +19,9 @@ class FirstPageState extends State<FirstPage> {
             title: new Center(
           child: new Text('首页'),
         )),
-        body: new SizedBox(
-            height: 256.0,
+        body: new RotatedBox(
+          quarterTurns: 4,
+            // height: .0,
             child: Card(
                 child: new Column(children: [
               new ListTile(

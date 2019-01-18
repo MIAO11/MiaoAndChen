@@ -31,7 +31,8 @@ class DtPage extends StatefulWidget {
   State<StatefulWidget> createState() => new GridViewState();
 }
 
-class GridViewState extends State {
+class GridViewState extends State with AutomaticKeepAliveClientMixin{
+
   var resultList = [];
   var channellist = [];
   var channel = [];
@@ -41,6 +42,9 @@ class GridViewState extends State {
     super.initState();
     getData();
   }
+  
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {

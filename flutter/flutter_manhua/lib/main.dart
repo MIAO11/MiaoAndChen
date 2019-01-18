@@ -36,20 +36,18 @@ void main() {
 class MyApp extends StatefulWidget {
   _MyAppState createState() => _MyAppState();
 }
-class _MyAppState extends State<MyApp> with AutomaticKeepAliveClientMixin{
+class _MyAppState extends State<MyApp>{
   PageController pageController;
   int currentIndex = 0;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     this.pageController = PageController(initialPage: this.currentIndex);
   }
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
         items: [
@@ -91,7 +89,4 @@ class _MyAppState extends State<MyApp> with AutomaticKeepAliveClientMixin{
       ),
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

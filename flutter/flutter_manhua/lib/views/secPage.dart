@@ -6,10 +6,17 @@ class SecPage extends StatefulWidget {
   createState() => new SecPageState();
 }
 
-class SecPageState extends State<SecPage> {
+class SecPageState extends State<SecPage> with AutomaticKeepAliveClientMixin{
+
+  @override
+  void initState() {
+    super.initState();
+    print('initState');
+  }
+
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+    super.build(context);
     return new Scaffold(
       appBar: new AppBar(
         title:new Center(
@@ -21,4 +28,7 @@ class SecPageState extends State<SecPage> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
