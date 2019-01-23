@@ -9,6 +9,8 @@ import './views/thirdPage.dart';
 import './views/MyPage.dart';
 import './views/Detail.dart';
 import 'package:flutter/rendering.dart';
+import 'package:jpush_flutter/jpush_flutter.dart';
+import 'dart:async';
 
 void main() {
   //debugPaintSizeEnabled = true; 
@@ -39,11 +41,46 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp>{
   PageController pageController;
   int currentIndex = 0;
-
+  final JPush jpush = new JPush();
   @override
   void initState() {
     super.initState();
     this.pageController = PageController(initialPage: this.currentIndex);
+    initPlatformState();
+  }
+
+  Future<void> initPlatformState() async {
+    String platformVersion;
+    jpush.getRegistrationID().then((rid) {
+      print(rid);
+    });
+    jpush.setup(
+      appKey: "114311f50bb78a9fef2e86b1",
+      channel: "theChannel",
+      production: false,
+      debug: true,
+    );
+
+    jpush.applyPushAuthority(new NotificationSettingsIOS(
+      sound: false,
+      alert: false,
+      badge: false));
+    try {     
+      jpush.addEventHandler(
+        onReceiveNotification: (Map<String, dynamic> message) async {
+         print("flutter onReceiveNotification: $message");
+      },
+      onOpenNotification: (Map<String, dynamic> message) async {
+        print("flutter onOpenNotification: $message");
+      },
+      onReceiveMessage: (Map<String, dynamic> message) async {
+        print("flutter onReceiveMessage: $message");        
+      },
+      );
+    } 
+     on Exception {
+       platformVersion = 'Failed to get platform version.';
+     }
   }
 
   @override

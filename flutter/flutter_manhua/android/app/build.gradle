@@ -32,6 +32,16 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        //以下为极光推送所需
+        // ndk {//选择要添加的对应 cpu 类型的 .so 库。
+        //     abiFilters 'armeabi', 'armeabi-v7a', 'x86', 'x86_64', 'mips', 'mips64' // 'arm64-v8a',        
+        // }
+        manifestPlaceholders = [
+        JPUSH_PKGNAME : applicationId,
+        JPUSH_APPKEY : "114311f50bb78a9fef2e86b1", // NOTE: JPush 上注册的包名对应的 Appkey.
+        JPUSH_CHANNEL : "developer-default", //暂时填写默认值即可.
+        ]
+
     }
 
     signingConfigs {
