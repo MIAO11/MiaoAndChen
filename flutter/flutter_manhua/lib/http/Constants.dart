@@ -7,6 +7,7 @@ class Constants {
       'http://app.u17.com/v3/appV3_3/android/phone/list/vipList?android_id=606dc724ed555018&v=3400100&model=HUAWEI+MLA-AL10&come_from=null';
   static const String HomeTjUrl =
       'http://app.u17.com//v3/appV3_3/android/phone/comic/boutiqueListNew?sexType=1';
+  static const LoginUrl='http://csbjfao.com:9692/lbxm-app/user/userController/login';    
 }
 
 // 今日首页  http://app.u17.com/v3/appV3_3/android/phone/comic/todayRecommend?android_id=606dc724ed555018&v=3400100&model=HUAWEI+MLA-AL10&come_from=null

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:manhua/http/Constants.dart';
+import 'package:manhua/http/HttpService.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -34,6 +37,16 @@ class LoginPageState extends State<LoginPage>with TickerProviderStateMixin {
       }
     });
     controller_record.forward();
+    init();
+    
+
+
+  }
+  // shared_preferences 用法
+  void init () async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    print(prefs.get('userName'));
+    _userNameController.text = prefs.get('userName');
   }
 
   @override
@@ -42,7 +55,10 @@ class LoginPageState extends State<LoginPage>with TickerProviderStateMixin {
     var topBottomPadding = 4.0;
     //var textTips = new TextStyle(fontSize: 16.0, color: Colors.black);
     var hintTips = new TextStyle(fontSize: 15.0, color: Colors.black26);
+    var params={'username':'','password':''};
+    
     return new Scaffold(
+      // primary: false,
       appBar: new AppBar(
         centerTitle: true,
         title: new Text('登录'),
@@ -52,8 +68,8 @@ class LoginPageState extends State<LoginPage>with TickerProviderStateMixin {
         Container(
               decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('images/test.jpg'),
-                fit: BoxFit.cover,
+                 image: AssetImage('images/test.jpg'),
+                 fit: BoxFit.cover,
                 colorFilter: ColorFilter.mode(Colors.black54, BlendMode.overlay)
               )
             ),
@@ -102,8 +118,16 @@ class LoginPageState extends State<LoginPage>with TickerProviderStateMixin {
               color: Colors.green,
               elevation: 6.0,
               child: new FlatButton(
-                  onPressed: () {
-                    print("the pass is" + _userNameController.text);
+                  onPressed: () async{
+                    SharedPreferences prefs = await SharedPreferences.getInstance();
+                    await prefs.setString('userName',_userNameController.text);
+                    params['username'] = _userNameController.text;
+                    params['password'] = _userPassController.text;
+                    HttpService.post(Constants.LoginUrl, (res) {
+                      prefs.setString('userInfo', res);
+                      prefs.setBool('isLogin', true);
+                      prefs.setBool('isLogin', true);                                               
+                    },params: params);
                   },
                   child: new Padding(
                     padding: new EdgeInsets.all(10.0),

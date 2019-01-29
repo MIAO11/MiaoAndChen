@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:manhua/util/Util.dart';
 import 'dart:convert';
 import '../http/Constants.dart';
 // import 'package:fluttertoast/fluttertoast.dart';
@@ -130,13 +131,7 @@ class ListState extends State<List> {
   Future<Null> _onRefresh() async {
     params['page'] = 1;
     getData(false);
-    // Fluttertoast.showToast(
-    //     msg: "下拉刷新成功",
-    //     toastLength: Toast.LENGTH_SHORT,
-    //     gravity: ToastGravity.BOTTOM,
-    //     timeInSecForIos: 1,
-    //     backgroundColor: Colors.black,
-    //     textColor: Colors.white);
+    Util.showToast('下拉刷新成功', context);
   }
 
   /**
